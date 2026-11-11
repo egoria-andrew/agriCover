@@ -99,15 +99,20 @@ class Database:
                 (code,name,summary,premium_ugx,billing_unit,active) VALUES (?,?,?,?,?,1)""", products)
 
             preview_users = [
-                ("AgriCover Administrator", "0700000001", os.environ.get("ADMIN_PASSWORD", "DemoAdmin2026!"), "Laroo", "Gulu", "admin"),
-                ("Field Agent", "0700000002", os.environ.get("AGENT_PASSWORD", "DemoAgent2026!"), "Laroo", "Gulu", "agent"),
-                ("Farmer Profile", "0700000003", os.environ.get("FARMER_PASSWORD", "DemoFarmer2026!"), "Palaro", "Gulu", "farmer"),
+                ("AgriCover Administrator", "0700000001", os.environ.get("ADMIN_PASSWORD", "Admin#12"), "Laroo", "Gulu", "admin"),
+                ("Field Agent", "0700000002", os.environ.get("AGENT_PASSWORD", "Agent#12"), "Laroo", "Gulu", "agent"),
+                ("Farmer Profile", "0700000003", os.environ.get("FARMER_PASSWORD", "Farm#123"), "Palaro", "Gulu", "farmer"),
             ]
             for name, phone, password, village, district, role in preview_users:
+                password_hash = hash_password(password)
                 db.execute("""INSERT OR IGNORE INTO users
                     (full_name,phone,password_hash,village,district,role,consent)
                     VALUES (?,?,?,?,?,?,1)""",
-                    (name, phone, hash_password(password), village, district, role))
+                    (name, phone, password_hash, village, district, role))
+                # Keep the three seeded walkthrough accounts in sync with their local defaults
+                # or Render environment variables, including on an already-created SQLite file.
+                db.execute("UPDATE users SET full_name=?,password_hash=?,village=?,district=?,role=?,consent=1 WHERE phone=?",
+                           (name, password_hash, village, district, role, phone))
             db.execute("UPDATE users SET full_name='Field Agent' WHERE phone='0700000002' AND full_name='Field Agent Demo'")
             db.execute("UPDATE users SET full_name='Farmer Profile' WHERE phone='0700000003' AND full_name='Farmer Demo'")
             farmer = db.execute("SELECT id FROM users WHERE phone=?", ("0700000003",)).fetchone()

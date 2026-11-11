@@ -15,11 +15,19 @@ You can also open PowerShell in this folder and run `py app.py`.
 
 | Role | Phone | Password |
 | --- | --- | --- |
-| Farmer | `0700000003` | `DemoFarmer2026!` |
-| Field agent | `0700000002` | `DemoAgent2026!` |
-| Administrator | `0700000001` | `DemoAdmin2026!` |
+| Farmer | `0700000003` | `Farm#123` |
+| Field agent | `0700000002` | `Agent#12` |
+| Administrator | `0700000001` | `Admin#12` |
 
-These shared accounts are for preview use only. Do not enter real client details or reuse these credentials elsewhere.
+These local preview passwords are 8 characters long. They are for walkthroughs only. Do not enter real client details or reuse these credentials elsewhere. On restart, the app updates these three seeded accounts in the local SQLite file to match the defaults above.
+
+## Create an agent or administrator account
+
+1. Create the person's account through **Join AgriCover** or let an agent onboard them. New accounts start as farmers.
+2. Sign in with the administrator account above and open **Overview**.
+3. In **People and roles**, find the account, choose **Agent** or **Admin**, and press **Save**.
+
+There is one seeded administrator account. Use it to promote another account if you want a second administrator. Agents can onboard farmers, but only an administrator can change account roles.
 
 ## A quick walkthrough
 
@@ -50,7 +58,7 @@ Use fictional information only. The seeded database is for walkthroughs and may 
 
 1. Put the contents of this folder in a **private GitHub repository**. Keep `instance/` and any local database out of it.
 2. In Render choose **New → Blueprint**, connect that repository, and apply `render.yaml`.
-3. Render creates the `agricover-preview` web service and generates its signing key and three preview account passwords. Find the generated passwords in the service's **Environment** settings and share them only with your lecturer or intended testers. The hosted sign-in screen does not publish the passwords.
+3. Render creates the `agricover-preview` web service and generates its signing key and three preview account passwords. Find them in the service's **Environment** settings. To use shorter passwords, replace `FARMER_PASSWORD`, `AGENT_PASSWORD`, and `ADMIN_PASSWORD` there with your own values (at least 8 characters), save, and deploy. The hosted sign-in screen does not publish the passwords.
 4. When the deploy finishes, open the `onrender.com` address shown in the service overview.
 
 Render's free web services sleep after 15 minutes without traffic and can take around a minute to wake. The free plan has an ephemeral filesystem, and it does not support persistent disks, so the SQLite data and any changes can be lost after a restart, redeploy, or spin-down. This is suitable for a temporary walkthrough, not ongoing farmer records. Use fictional information only.
