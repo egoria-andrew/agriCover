@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: agricover-preview
+    name: agricover
     runtime: python
     plan: free
     buildCommand: python -m compileall -q .
