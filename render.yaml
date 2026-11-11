@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: agricover-preview
+    runtime: python
+    plan: free
+    buildCommand: python -m compileall -q .
+    startCommand: python app.py
+    healthCheckPath: /health
+    envVars:
+      - key: APP_SECRET
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: AGENT_PASSWORD
+        generateValue: true
+      - key: FARMER_PASSWORD
+        generateValue: true
+      - key: DATABASE_PATH
+        value: /tmp/agricover.sqlite3
